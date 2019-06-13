@@ -1,6 +1,6 @@
 {
 	"name": "@samuelmeuli/font-manager",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"description": "Manages, downloads and applies Google Fonts for picker components",
 	"author": "Samuel Meuli <me@samuelmeuli.com>",
 	"repository": "github:samuelmeuli/font-manager",
