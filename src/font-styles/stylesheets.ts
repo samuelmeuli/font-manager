@@ -12,12 +12,11 @@ function getStylesheetId(fontId: string): string {
  */
 export function stylesheetExists(fontId: string, isPreview?: boolean): boolean {
 	const stylesheetNode = document.getElementById(getStylesheetId(fontId));
-	const stylesheetNodeExists = stylesheetNode !== null;
 	if (isPreview === null || isPreview === undefined) {
-		return stylesheetNodeExists;
+		return stylesheetNode !== null;
 	}
 	return (
-		stylesheetNodeExists &&
+		stylesheetNode !== null &&
 		stylesheetNode.getAttribute(PREVIEW_ATTRIBUTE_NAME) === isPreview.toString()
 	);
 }

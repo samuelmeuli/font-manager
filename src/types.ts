@@ -54,9 +54,9 @@ export interface Font {
 	// Fields used by font-picker
 	family: string;
 	id: string;
-	category?: Category;
-	scripts?: Script[]; // Called "subsets" in Google Fonts API
-	variants?: Variant[];
+	category: Category;
+	scripts: Script[]; // Called "subsets" in Google Fonts API
+	variants: Variant[];
 
 	// Other fields specified by the API
 	kind?: string; // Usually "webfonts#webfont"
@@ -68,11 +68,11 @@ export interface Font {
 export type FontList = Map<string, Font>;
 
 export interface Options {
-	pickerId?: string;
-	families?: string[];
-	categories?: Category[];
-	scripts?: Script[];
-	variants?: Variant[];
-	limit?: number;
-	sort?: SortOption;
+	pickerId: string;
+	families: string[];
+	categories: Category[];
+	scripts: Script[];
+	variants: Variant[];
+	limit: number;
+	sort: SortOption;
 }

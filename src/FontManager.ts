@@ -43,6 +43,7 @@ export default class FontManager {
 			scripts = ["latin"],
 			variants = ["regular"],
 			limit = 50,
+			sort = "alphabet",
 		}: Options,
 		onChange: (font: Font) => void = (): void => {},
 	) {
@@ -59,6 +60,7 @@ export default class FontManager {
 			scripts,
 			variants,
 			limit,
+			sort,
 		};
 		this.onChange = onChange;
 
@@ -118,6 +120,7 @@ export default class FontManager {
 	 * Add a new font to the font map and download its preview characters
 	 */
 	public addFont(fontFamily: string, downloadPreview: boolean = true): void {
+		// @ts-ignore: Custom font does not need `categories`, `scripts` and `variants` attributes
 		const font: Font = {
 			family: fontFamily,
 			id: getFontId(fontFamily),
@@ -143,20 +146,25 @@ export default class FontManager {
 	 * Return the font object of the currently active font
 	 */
 	public getActiveFont(): Font {
-		return this.fonts.get(this.activeFontFamily);
+		const activeFont = this.fonts.get(this.activeFontFamily);
+		if (!activeFont) {
+			throw Error(`Cannot get active font: "${this.activeFontFamily}" is not in the font list`);
+		} else {
+			return activeFont;
+		}
 	}
 
 	/**
 	 * Set the specified font as the active font and download it
 	 */
 	public setActiveFont(fontFamily: string, runOnChange: boolean = true): void {
-		if (!this.fonts.has(fontFamily)) {
-			// Font is not in fontList: Keep current activeFont and log error
-			console.error(`Cannot update active font: "${fontFamily}" is not in the font list`);
-			return;
-		}
 		const previousFontFamily = this.activeFontFamily;
 		const activeFont = this.fonts.get(fontFamily);
+		if (!activeFont) {
+			// Font is not in fontList: Keep current activeFont and log error
+			throw Error(`Cannot update active font: "${fontFamily}" is not in the font list`);
+		}
+
 		this.activeFontFamily = fontFamily;
 		loadActiveFont(
 			activeFont,
