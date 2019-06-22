@@ -65,6 +65,8 @@ export interface Font {
 	files?: Record<Variant, string>; // Font file for each variant
 }
 
+export const FONT_FAMILY_DEFAULT = "Open Sans";
+
 export type FontList = Map<string, Font>;
 
 export interface Options {
@@ -76,3 +78,13 @@ export interface Options {
 	limit: number;
 	sort: SortOption;
 }
+
+export const OPTIONS_DEFAULTS: Options = {
+	pickerId: "",
+	families: [],
+	categories: [],
+	scripts: ["latin"],
+	variants: ["regular"],
+	limit: 50,
+	sort: "alphabet",
+};
