@@ -1,8 +1,12 @@
 import autoprefixer from "autoprefixer";
+import autoExternal from "rollup-plugin-auto-external";
+import babel from "rollup-plugin-babel";
+import resolve from "rollup-plugin-node-resolve";
 import postcss from "rollup-plugin-postcss";
-import typescript from "rollup-plugin-typescript2";
 
 import pkg from "./package.json";
+
+const EXTENSIONS = [".js", ".ts"];
 
 export default [
 	{
@@ -19,9 +23,20 @@ export default [
 			},
 		],
 		plugins: [
-			typescript({
-				cacheRoot: "./node_modules/.cache/rollup-plugin-typescript2/",
+			// Exclude dependencies and peerDependencies from bundle
+			autoExternal(),
+			// Resolve TypeScript files and dependencies
+			resolve({
+				extensions: EXTENSIONS,
 			}),
+			// Transform TypeScript with Babel
+			babel({
+				presets: ["@babel/preset-env", "@babel/preset-typescript"],
+				plugins: ["@babel/plugin-proposal-class-properties"],
+				exclude: "./node_modules/**",
+				extensions: EXTENSIONS,
+			}),
+			// Transform SCSS with PostCSS
 			postcss({
 				plugins: [autoprefixer],
 			}),
