@@ -2,7 +2,7 @@ import { Font, Script } from "../types";
 import { getFontId } from "../utils/ids";
 import get from "../utils/request";
 
-const LIST_BASE_URL = "https://www.googleapis.com/webfonts/v1";
+const LIST_BASE_URL = "https://www.googleapis.com/webfonts/v1/webfonts";
 
 /**
  * Font object returned by the Google API. Contains a field "subsets" which will be renamed to
@@ -17,8 +17,10 @@ interface FontResponse extends Font {
  */
 export default async function getFontList(apiKey: string): Promise<Font[]> {
 	// Request list of all Google Fonts, sorted by popularity
-	const url = `${LIST_BASE_URL}/webfonts?sort=popularity&key=${apiKey}`;
-	const response = await get(url);
+	const url = new URL(LIST_BASE_URL);
+	url.searchParams.append("sort", "popularity");
+	url.searchParams.append("key", apiKey);
+	const response = await get(url.href);
 
 	// Parse font list
 	const json = JSON.parse(response);

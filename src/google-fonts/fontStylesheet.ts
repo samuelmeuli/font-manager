@@ -14,15 +14,15 @@ export default async function getStylesheet(
 	variants: Variant[],
 	previewsOnly: boolean,
 ): Promise<string> {
+	const url = new URL(FONT_BASE_URL);
+
 	// Build query URL for specified font families and variants
-	const variantsEnc = variants.join(",");
-	const familiesEnc = fonts.map(
-		(font): string => `${encodeURIComponent(font.family)}:${variantsEnc}`,
-	);
-	let query = `?family=${familiesEnc.join("|")}`;
+	const variantsStr = variants.join(",");
+	const familiesStr = fonts.map((font): string => `${font.family}:${variantsStr}`);
+	url.searchParams.append("family", familiesStr.join("|"));
 
 	// Query the fonts in the specified scripts
-	query += `&subset=${scripts.join(",")}`;
+	url.searchParams.append("subset", scripts.join(","));
 
 	// If previewsOnly: Only query the characters contained in the font names
 	if (previewsOnly) {
@@ -34,10 +34,9 @@ export default async function getStylesheet(
 			.filter((char, pos, self): boolean => self.indexOf(char) === pos)
 			.join("");
 		// Query only the identified characters
-		query += `&text=${downloadChars}`;
+		url.searchParams.append("text", downloadChars);
 	}
 
 	// Fetch and return stylesheet
-	const url = `${FONT_BASE_URL}${query}`;
-	return get(url);
+	return get(url.href);
 }
