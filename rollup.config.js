@@ -18,9 +18,7 @@ export default {
 		},
 	],
 	plugins: [
-		typescript({
-			cacheRoot: "./node_modules/.cache/rollup-plugin-typescript2/",
-		}),
+		typescript(),
 		postcss({
 			plugins: [postcssPresetEnv],
 		}),
