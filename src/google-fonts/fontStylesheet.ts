@@ -37,6 +37,9 @@ export default async function getStylesheet(
 		url.searchParams.append("text", downloadChars);
 	}
 
+	// Tell browser to render fallback font immediately and swap in the new font once it's loaded
+	url.searchParams.append("font-display", "swap");
+
 	// Fetch and return stylesheet
 	return get(url.href);
 }
