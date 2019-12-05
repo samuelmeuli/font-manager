@@ -75,6 +75,7 @@ export interface Options {
 	categories: Category[];
 	scripts: Script[];
 	variants: Variant[];
+	filter: (font: Font) => boolean;
 	limit: number;
 	sort: SortOption;
 }
@@ -85,6 +86,7 @@ export const OPTIONS_DEFAULTS: Options = {
 	categories: [],
 	scripts: ["latin"],
 	variants: ["regular"],
+	filter: () => true,
 	limit: 50,
 	sort: "alphabet",
 };

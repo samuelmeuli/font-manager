@@ -2,15 +2,7 @@ import "./picker-styles/styles.scss";
 
 import getFontList from "./google-fonts/fontList";
 import { loadActiveFont, loadFontPreviews } from "./loadFonts";
-import {
-	Font,
-	FONT_FAMILY_DEFAULT,
-	FontList,
-	Options,
-	OPTIONS_DEFAULTS,
-	Script,
-	Variant,
-} from "./types";
+import { Font, FONT_FAMILY_DEFAULT, FontList, Options, OPTIONS_DEFAULTS } from "./types";
 import { getFontId, validatePickerId } from "./utils/ids";
 
 /**
@@ -51,6 +43,7 @@ export default class FontManager {
 			categories = OPTIONS_DEFAULTS.categories,
 			scripts = OPTIONS_DEFAULTS.scripts,
 			variants = OPTIONS_DEFAULTS.variants,
+			filter = OPTIONS_DEFAULTS.filter,
 			limit = OPTIONS_DEFAULTS.limit,
 			sort = OPTIONS_DEFAULTS.sort,
 		}: Options,
@@ -69,6 +62,7 @@ export default class FontManager {
 			categories,
 			scripts,
 			variants,
+			filter,
 			limit,
 			sort,
 		};
@@ -102,9 +96,11 @@ export default class FontManager {
 				// `categories` parameter: only keep fonts in categories from the provided array
 				(this.options.categories.length === 0 || this.options.categories.includes(font.category)) &&
 				// `scripts` parameter: Only keep fonts which are available in all specified scripts
-				this.options.scripts.every((script: Script): boolean => font.scripts.includes(script)) &&
+				this.options.scripts.every((script): boolean => font.scripts.includes(script)) &&
 				// `variants` parameter: Only keep fonts which contain all specified variants
-				this.options.variants.every((variant: Variant): boolean => font.variants.includes(variant))
+				this.options.variants.every((variant): boolean => font.variants.includes(variant)) &&
+				// `filter` parameter: Only keep fonts for which the `filter` function evaluates to `true`
+				this.options.filter(font) === true
 			) {
 				// Font fulfils all requirements: Add it to font map
 				this.fonts.set(font.family, font);
