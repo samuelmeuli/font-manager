@@ -170,6 +170,11 @@
   resolved "https://registry.yarnpkg.com/@samuelmeuli/eslint-config/-/eslint-config-4.0.1.tgz#e01ea155b87a8ddea189cd6d6ea54779e4a210dd"
   integrity sha512-ZBbctqLS8IlMsPOlGTPvDLfmGOHbVAcAEXPdmpM4CQraQtd1PmhMfURfjSjfhNaXOF4+hHMnKGcmvqnqjcnD9g==
 
+"@samuelmeuli/prettier-config@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@samuelmeuli/prettier-config/-/prettier-config-1.0.0.tgz#b0d7199b7cd4fddd433bfbec9d0740cb8d51894f"
+  integrity sha512-9yas6va4MF23bNQsTjlNCkaR4yMntDyerZo8bF9Jh3yN6MrJRa1IxlMGaCf0mcvmWlHD8WwGG958uutM1oy7Zw==
+
 "@samuelmeuli/stylelint-config@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@samuelmeuli/stylelint-config/-/stylelint-config-1.0.3.tgz#492a6bba2b131011133afca8cdc49db2040229e7"
