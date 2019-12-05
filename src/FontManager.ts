@@ -1,10 +1,11 @@
+import "./picker-styles/styles.scss";
+
 import getFontList from "./google-fonts/fontList";
 import { loadActiveFont, loadFontPreviews } from "./loadFonts";
-import "./picker-styles/styles.scss";
 import {
 	Font,
-	FontList,
 	FONT_FAMILY_DEFAULT,
+	FontList,
 	Options,
 	OPTIONS_DEFAULTS,
 	Script,
@@ -53,6 +54,7 @@ export default class FontManager {
 			limit = OPTIONS_DEFAULTS.limit,
 			sort = OPTIONS_DEFAULTS.sort,
 		}: Options,
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
 		onChange: (font: Font) => void = (): void => {},
 	) {
 		// Validate pickerId parameter
@@ -127,7 +129,7 @@ export default class FontManager {
 	/**
 	 * Add a new font to the font map and download its preview characters
 	 */
-	public addFont(fontFamily: string, downloadPreview: boolean = true): void {
+	public addFont(fontFamily: string, downloadPreview = true): void {
 		// @ts-ignore: Custom font does not need `categories`, `scripts` and `variants` attributes
 		const font: Font = {
 			family: fontFamily,
@@ -165,7 +167,7 @@ export default class FontManager {
 	/**
 	 * Set the specified font as the active font and download it
 	 */
-	public setActiveFont(fontFamily: string, runOnChange: boolean = true): void {
+	public setActiveFont(fontFamily: string, runOnChange = true): void {
 		const previousFontFamily = this.activeFontFamily;
 		const activeFont = this.fonts.get(fontFamily);
 		if (!activeFont) {
