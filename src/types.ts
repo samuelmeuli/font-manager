@@ -54,6 +54,7 @@ export interface Font {
 	// Fields used by font-picker
 	family: string;
 	id: string;
+  url: string; // For fonts from custom url
 	category: Category;
 	scripts: Script[]; // Called "subsets" in Google Fonts API
 	variants: Variant[];
