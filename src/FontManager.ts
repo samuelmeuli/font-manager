@@ -125,11 +125,12 @@ export default class FontManager {
 	/**
 	 * Add a new font to the font map and download its preview characters
 	 */
-	public addFont(fontFamily: string, downloadPreview = true): void {
+	public addFont(fontFamily: string, downloadPreview = true, url = ''): void {
 		// @ts-ignore: Custom font does not need `categories`, `scripts` and `variants` attributes
 		const font: Font = {
 			family: fontFamily,
 			id: getFontId(fontFamily),
+      url
 		};
 		this.fonts.set(fontFamily, font);
 

@@ -10,6 +10,19 @@ import getStylesheet from "./google-fonts/fontStylesheet";
 import { Font, FontList, Script, Variant } from "./types";
 
 /**
+ * Helper to get a font-face declaration
+ */
+function getSimpleStylesheet(font: Font): string {
+      return `
+        @font-face {
+
+        font-family: '${font.family}';
+        font-style: normal;
+        font-weight: 400;
+        src: url(${font.url});`
+}
+
+/**
  * Get the Google Fonts stylesheet for the specified font (in the specified scripts and variants,
  * only the characters needed for creating the font previews), add the necessary CSS declarations to
  * apply them and add the fonts' stylesheets to the document head
@@ -22,6 +35,8 @@ export async function loadFontPreviews(
 ): Promise<void> {
 	// Only load previews of fonts which don't have a stylesheet (for preview or full font) yet
 	const fontsArray: Font[] = Array.from(fonts.values());
+	const fontsGoogle = fontsArray
+		.filter((font: Font): boolean => font.url === '' || font.url === undefined)
 	const fontsToFetch = fontsArray
 		.map((font: Font): string => font.id)
 		.filter((fontId): boolean => !stylesheetExists(fontId));
@@ -30,26 +45,36 @@ export async function loadFontPreviews(
 	// pickers from loading the fonts as well)
 	fontsToFetch.forEach((fontId): void => createStylesheet(fontId, true));
 
-	// Get Google Fonts stylesheet containing all requested styles
-	const response = await getStylesheet(fontsArray, scripts, variants, true);
-	// Parse response and assign styles to the corresponding font
-	const fontStyles = extractFontStyles(response);
+	let fontStyles: Record<string, string> = {};
+  if (fontsGoogle.length > 0) {
+    // Get Google Fonts stylesheet containing all requested styles
+    const response = await getStylesheet(fontsGoogle, scripts, variants, true);
+    // Parse response and assign styles to the corresponding font
+    fontStyles = extractFontStyles(response);
+  }
 
 	// Create separate stylesheets for the fonts
 	fontsArray.forEach((font): void => {
 		applyFontPreview(font, selectorSuffix);
 
+
 		// Add stylesheets for fonts which need to be downloaded
 		if (fontsToFetch.includes(font.id)) {
-			// Make sure response contains styles for the font
-			if (!(font.id in fontStyles)) {
-				console.error(
-					`Missing styles for font "${font.family}" (fontId "${font.id}") in Google Fonts response`,
-				);
-				return;
-			}
+      let fontStyle = ''
+      if (font.url === '' || font.url === undefined || font.url === null) {
+        // Make sure response contains styles for the font
+        if (!(font.id in fontStyles)) {
+          console.error(
+            `Missing styles for font "${font.family}" (fontId "${font.id}") in Google Fonts response`,
+          );
+          return;
+        }
+        fontStyle = fontStyles[font.id]
+      } else {
+        fontStyle = getSimpleStylesheet(font)
+      }
 			// Insert styles into the stylesheet element which was created earlier
-			fillStylesheet(font.id, fontStyles[font.id]);
+			fillStylesheet(font.id, fontStyle);
 		}
 	});
 }
@@ -79,8 +104,13 @@ export async function loadActiveFont(
 			createStylesheet(font.id, false);
 		}
 
-		// Get Google Fonts stylesheet containing all requested styles
-		const fontStyle = await getStylesheet([font], scripts, variants, false);
+    let fontStyle
+    if (font.url === '' || font.url === undefined || font.url === null) {
+      // Get Google Fonts stylesheet containing all requested styles
+      fontStyle = await getStylesheet([font], scripts, variants, false);
+    } else {
+      fontStyle = getSimpleStylesheet(font)
+    }
 
 		// Add CSS declaration to apply the new active font
 		applyActiveFont(font, previousFontFamily, selectorSuffix);
