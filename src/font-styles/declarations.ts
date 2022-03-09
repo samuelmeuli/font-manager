@@ -1,13 +1,17 @@
 import { Font } from "../types";
 import { getFontId } from "../utils/ids";
 
-const previewFontsStylesheet = document.createElement("style");
-document.head.appendChild(previewFontsStylesheet);
+let previewFontsStylesheet: HTMLStyleElement;
 
 /**
  * Add declaration for applying the specified preview font
  */
 export function applyFontPreview(previewFont: Font, selectorSuffix: string): void {
+	if (!previewFontsStylesheet && typeof document !== "undefined") {
+		previewFontsStylesheet = document.createElement("style");
+		document.head.appendChild(previewFontsStylesheet);
+	}
+
 	const fontId = getFontId(previewFont.family);
 	const style = `
 			#font-button-${fontId}${selectorSuffix} {
